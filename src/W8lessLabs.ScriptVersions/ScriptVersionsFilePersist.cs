@@ -15,7 +15,7 @@ namespace W8lessLabs.ScriptVersions
         public void Save(ScriptVersionsFile file)
         {
             if (file != null)
-                File.WriteAllText(_path, JsonConvert.SerializeObject(file));
+                File.WriteAllText(_path, JsonConvert.SerializeObject(file, Formatting.Indented));
         }
 
         public ScriptVersionsFile Load()

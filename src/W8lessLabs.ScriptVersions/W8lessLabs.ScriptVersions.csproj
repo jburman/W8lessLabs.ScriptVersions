@@ -4,13 +4,16 @@
     <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
     <Authors>Jeremy Burman</Authors>
     <Company>W8less Labs</Company>
-    <Copyright>2018, Jeremy Burman</Copyright>
+    <Copyright>Copyright © Jeremy Burman 2018</Copyright>
     <Description>Provides a library for maintaining versioned information about files based on their hashes. This is intended for use both at build and at run time.</Description>
     <PackageProjectUrl>https://github.com/jburman/W8lessLabs.ScriptVersions</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/jburman/W8lessLabs.ScriptVersions/blob/master/LICENSE</PackageLicenseUrl>
     <RepositoryUrl>https://github.com/jburman/W8lessLabs.ScriptVersions.git</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
-    <PackageReleaseNotes>A little library for maintaining version information about script files based on their hashes.</PackageReleaseNotes>
+    <PackageReleaseNotes>Add indentation to JSON formatting.</PackageReleaseNotes>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
