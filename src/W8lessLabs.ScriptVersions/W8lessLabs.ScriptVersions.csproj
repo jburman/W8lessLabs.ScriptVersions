@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
+    <Authors>Jeremy Burman</Authors>
+    <Company>W8less Labs</Company>
+    <Copyright />
+    <Description>Provides a library for maintaining versioned information about files based on their hashes. This is intended for use both at build and at run time.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
+  </ItemGroup>
+
+</Project>
