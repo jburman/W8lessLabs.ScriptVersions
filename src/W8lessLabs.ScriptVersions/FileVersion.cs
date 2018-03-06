@@ -16,10 +16,10 @@
         }
 
 
-        public string Name { get; private set; }
-        public string Path { get; private set; }
-        public string Hash { get; private set; }
-        public int Version { get; private set; }
+        public string Name { get; set; }
+        public string Path { get; set; }
+        public string Hash { get; set; }
+        public int Version { get; set; }
 
         public FileVersion IncrementVersion(string newHash) =>
             new FileVersion()

@@ -52,6 +52,10 @@ namespace W8lessLabs.ScriptVersions.Test
                 var loadedVersions = persist.Load();
 
                 Assert.Equal(versions.LastUpdated, loadedVersions.LastUpdated);
+                Assert.Equal("test1.js", loadedVersions.Files["js"][0].Name);
+                Assert.Equal("asdf123", loadedVersions.Files["js"][0].Hash);
+                Assert.Equal("scripts", loadedVersions.Files["js"][0].Path);
+                Assert.Equal(1, loadedVersions.Files["js"][0].Version);
             }
             finally
             {
