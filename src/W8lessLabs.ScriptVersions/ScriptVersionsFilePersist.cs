@@ -55,7 +55,7 @@ namespace W8lessLabs.ScriptVersions
                         if(json.TokenType == JsonToken.PropertyName && json.Value.ToString() == lastUpdatedProperty)
                         {
                             DateTimeOffset? lastUpdated = await json.ReadAsDateTimeOffsetAsync().ConfigureAwait(false);
-                            if (lastUpdated.HasValue && lastUpdated.Value == newTimeStamp)
+                            if (lastUpdated.HasValue && lastUpdated.Value >= newTimeStamp)
                                 returnNewer = false;
                             break;
                         }

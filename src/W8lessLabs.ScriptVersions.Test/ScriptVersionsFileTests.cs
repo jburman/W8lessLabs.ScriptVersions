@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace W8lessLabs.ScriptVersions.Test
@@ -51,6 +52,41 @@ namespace W8lessLabs.ScriptVersions.Test
                 var loadedVersions = persist.Load();
 
                 Assert.Equal(versions.LastUpdated, loadedVersions.LastUpdated);
+            }
+            finally
+            {
+                File.Delete(tempPath);
+            }
+        }
+
+        [Fact]
+        public async Task IsNewer()
+        {
+            string tempPath = Path.Combine(Path.GetTempPath(), "scriptversionstest.json");
+            var persist = new ScriptVersionsFilePersist(tempPath);
+            DateTimeOffset lastUpdated = DateTimeOffset.Now;
+
+            try
+            {
+                var versions = new ScriptVersionsFile();
+
+                Assert.True(await persist.IsNewer(lastUpdated));
+
+                Thread.Sleep(1);
+
+                bool updated = versions.SetVersions("js", new[]
+                {
+                    new FileVersion("test1.js",
+                        "asdf123",
+                        "scripts",
+                        1)
+                });
+
+                persist.Save(versions);
+
+                Assert.False(await persist.IsNewer(lastUpdated));
+
+                Assert.True(await persist.IsNewer(DateTimeOffset.Now.AddSeconds(1)));
             }
             finally
             {
