@@ -24,7 +24,7 @@
         public FileVersion IncrementVersion(string newHash) =>
             new FileVersion()
             {
-                Name =jeremy.burman Name,
+                Name = Name,
                 Path = Path,
                 Hash = newHash,
                 Version = Version + 1
