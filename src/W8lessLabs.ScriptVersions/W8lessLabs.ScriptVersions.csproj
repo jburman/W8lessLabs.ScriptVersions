@@ -10,10 +10,10 @@
     <PackageLicenseUrl>https://github.com/jburman/W8lessLabs.ScriptVersions/blob/master/LICENSE</PackageLicenseUrl>
     <RepositoryUrl>https://github.com/jburman/W8lessLabs.ScriptVersions.git</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
-    <PackageReleaseNotes>Make JSON deserialization actually work.</PackageReleaseNotes>
+    <PackageReleaseNotes>Add async support to Load script versions file.</PackageReleaseNotes>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <FileVersion>1.0.0.0</FileVersion>
-    <Version>1.0.3</Version>
+    <Version>1.0.4</Version>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace W8lessLabs.ScriptVersions
@@ -29,6 +31,21 @@ namespace W8lessLabs.ScriptVersions
                 using (var reader = new StreamReader(file))
                 using (var json = new JsonTextReader(reader))
                     returnFile = serializer.Deserialize(json, typeof(ScriptVersionsFile)) as ScriptVersionsFile;
+            }
+            return returnFile;
+        }
+
+        public async Task<ScriptVersionsFile> LoadAsync(CancellationToken cancellation = default(CancellationToken))
+        {
+            ScriptVersionsFile returnFile = null;
+            if (File.Exists(_path))
+            {
+                using (var file = File.OpenRead(_path))
+                using (var reader = new StreamReader(file))
+                using (var json = new JsonTextReader(reader)) {
+                    JObject jsonObj = (await JObject.LoadAsync(json, cancellation).ConfigureAwait(false));
+                    returnFile = jsonObj.ToObject<ScriptVersionsFile>();
+                }
             }
             return returnFile;
         }

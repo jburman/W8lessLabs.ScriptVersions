@@ -24,6 +24,14 @@ namespace W8lessLabs.ScriptVersions.Test
             Assert.Null(persist.Load());
         }
 
+        [Fact]
+        public async Task LoadAsyncNonExistingFile()
+        {
+            string tempPath = Path.Combine(Path.GetTempPath(), "does_not_exist.json");
+            var persist = new ScriptVersionsFilePersist(tempPath);
+            Assert.Null(await persist.LoadAsync());
+        }
+
 
         [Fact]
         public void SaveAndLoad()
@@ -50,6 +58,44 @@ namespace W8lessLabs.ScriptVersions.Test
                 persist.Save(versions);
 
                 var loadedVersions = persist.Load();
+
+                Assert.Equal(versions.LastUpdated, loadedVersions.LastUpdated);
+                Assert.Equal("test1.js", loadedVersions.Files["js"][0].Name);
+                Assert.Equal("asdf123", loadedVersions.Files["js"][0].Hash);
+                Assert.Equal("scripts", loadedVersions.Files["js"][0].Path);
+                Assert.Equal(1, loadedVersions.Files["js"][0].Version);
+            }
+            finally
+            {
+                File.Delete(tempPath);
+            }
+        }
+
+        [Fact]
+        public async Task SaveAndLoadAsync()
+        {
+            string tempPath = Path.Combine(Path.GetTempPath(), "scriptversionstest_async.json");
+            var persist = new ScriptVersionsFilePersist(tempPath);
+            DateTimeOffset lastUpdated = DateTimeOffset.Now;
+
+            try
+            {
+                var versions = new ScriptVersionsFile();
+                Assert.Equal(default(DateTimeOffset), versions.LastUpdated);
+
+                bool updated = versions.SetVersions("js", new[]
+                {
+                    new FileVersion("test1.js",
+                        "asdf123",
+                        "scripts",
+                        1)
+                });
+
+                Assert.NotEqual(default(DateTimeOffset), versions.LastUpdated);
+
+                persist.Save(versions);
+
+                var loadedVersions = await persist.LoadAsync();
 
                 Assert.Equal(versions.LastUpdated, loadedVersions.LastUpdated);
                 Assert.Equal("test1.js", loadedVersions.Files["js"][0].Name);
