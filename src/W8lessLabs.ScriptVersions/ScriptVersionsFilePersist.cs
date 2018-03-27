@@ -20,18 +20,20 @@ namespace W8lessLabs.ScriptVersions
                 File.WriteAllText(_path, JsonConvert.SerializeObject(file, Formatting.Indented));
         }
 
+        public static ScriptVersionsFile LoadFromStream(Stream stream)
+        {
+            var serializer = new JsonSerializer();
+            using (var reader = new StreamReader(stream))
+            using (var json = new JsonTextReader(reader))
+                return serializer.Deserialize(json, typeof(ScriptVersionsFile)) as ScriptVersionsFile;
+        }
+
         public ScriptVersionsFile Load()
         {
             ScriptVersionsFile returnFile = null;
             if(File.Exists(_path))
-            {
-                var serializer = new JsonSerializer();
-                
-                using (var file = File.OpenRead(_path))
-                using (var reader = new StreamReader(file))
-                using (var json = new JsonTextReader(reader))
-                    returnFile = serializer.Deserialize(json, typeof(ScriptVersionsFile)) as ScriptVersionsFile;
-            }
+                using (var stream = File.OpenRead(_path))
+                    returnFile = LoadFromStream(stream);
             return returnFile;
         }
 
@@ -51,13 +53,13 @@ namespace W8lessLabs.ScriptVersions
         }
 
         /// <summary>
-        /// Checks if a given date time is newer than what is stored in the json file stored on disk.
+        /// Checks if a the json file stored on disk is newer than the passed in timestamp.
         /// </summary>
-        /// <param name="newTimeStamp"></param>
+        /// <param name="compareTimeStamp"></param>
         /// <returns></returns>
-        public async Task<bool> IsNewer(DateTimeOffset newTimeStamp)
+        public async Task<bool> IsNewerThan(DateTimeOffset compareTimeStamp)
         {
-            bool returnNewer = true;
+            bool returnNewer = false;
 
             if(File.Exists(_path))
             {
@@ -72,8 +74,8 @@ namespace W8lessLabs.ScriptVersions
                         if(json.TokenType == JsonToken.PropertyName && json.Value.ToString() == lastUpdatedProperty)
                         {
                             DateTimeOffset? lastUpdated = await json.ReadAsDateTimeOffsetAsync().ConfigureAwait(false);
-                            if (lastUpdated.HasValue && lastUpdated.Value >= newTimeStamp)
-                                returnNewer = false;
+                            if (lastUpdated.HasValue && lastUpdated.Value >= compareTimeStamp)
+                                returnNewer = true;
                             break;
                         }
                     }

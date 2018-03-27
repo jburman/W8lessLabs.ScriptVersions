@@ -1,0 +1,81 @@
+﻿{
+  "LastUpdated": "2018-03-26T21:32:47.6669838-04:00",
+  "Files": {
+    "js": [
+      {
+        "Name": "app.js",
+        "Path": "scripts",
+        "Hash": "D9D6514E20B360521F9ECE284AF6124A34C9E1C0",
+        "Version": 1
+      },
+      {
+        "Name": "app.min.js",
+        "Path": "scripts",
+        "Hash": "FB16AF1F5D52A539EF413B899BA5651D8FE9C04C",
+        "Version": 1
+      },
+      {
+        "Name": "main.js",
+        "Path": "scripts",
+        "Hash": "EA809369B2C40412A504AD0E45D1FC23BADB71A0",
+        "Version": 1
+      },
+      {
+        "Name": "vendor.js",
+        "Path": "scripts",
+        "Hash": "A81397DFB18273770F0ECA74660DEAE89B326C5E",
+        "Version": 1
+      },
+      {
+        "Name": "vendor.min.js",
+        "Path": "scripts",
+        "Hash": "3A4ABF323F2E6133856E7FDDFBB8B58558F794B7",
+        "Version": 1
+      },
+      {
+        "Name": "module1.js",
+        "Path": "scripts/submodule1",
+        "Hash": "E9E08CE70FB7F71F64D144843E26498AD5E2E992",
+        "Version": 1
+      },
+      {
+        "Name": "test.js",
+        "Path": "scripts/submodule1",
+        "Hash": "9001B46E3DA06935929BFF7E6FDF2DC840DE1501",
+        "Version": 1
+      }
+    ],
+    "css": [
+      {
+        "Name": "app.css",
+        "Path": "css",
+        "Hash": "AACA5DFCC28D7851516666B72093F39016EC8B8E",
+        "Version": 1
+      },
+      {
+        "Name": "app.min.css",
+        "Path": "css",
+        "Hash": "068B454754510703B2025AE1910B215A239AE2D7",
+        "Version": 1
+      },
+      {
+        "Name": "main.css",
+        "Path": "css",
+        "Hash": "37D08D54DDC6BD5869E3D8A989363A1D3867348E",
+        "Version": 1
+      },
+      {
+        "Name": "vendor.css",
+        "Path": "css",
+        "Hash": "B8FE2D78BBEF56669AF1C75443BE174EBCE1E356",
+        "Version": 1
+      },
+      {
+        "Name": "vendor.min.css",
+        "Path": "css",
+        "Hash": "5B78016543A3D79304D901549D415FFA863EEF50",
+        "Version": 1
+      }
+    ]
+  }
+}

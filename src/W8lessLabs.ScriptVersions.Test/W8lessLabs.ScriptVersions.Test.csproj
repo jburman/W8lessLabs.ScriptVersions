@@ -17,4 +17,13 @@
     <ProjectReference Include="..\W8lessLabs.ScriptVersions\W8lessLabs.ScriptVersions.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="TestData\scriptversions.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\scriptversionswithcss.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

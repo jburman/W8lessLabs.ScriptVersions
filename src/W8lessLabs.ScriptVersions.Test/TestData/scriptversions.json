@@ -1,0 +1,49 @@
+﻿{
+  "LastUpdated": "2018-03-22T09:04:31.0857434-04:00",
+  "Files": {
+    "js": [
+      {
+        "Name": "app.js",
+        "Path": "scripts",
+        "Hash": "D9D6514E20B360521F9ECE284AF6124A34C9E1C0",
+        "Version": 1
+      },
+      {
+        "Name": "app.min.js",
+        "Path": "scripts",
+        "Hash": "FB16AF1F5D52A539EF413B899BA5651D8FE9C04C",
+        "Version": 1
+      },
+      {
+        "Name": "main.js",
+        "Path": "scripts",
+        "Hash": "EA809369B2C40412A504AD0E45D1FC23BADB71A0",
+        "Version": 5
+      },
+      {
+        "Name": "vendor.js",
+        "Path": "scripts",
+        "Hash": "A81397DFB18273770F0ECA74660DEAE89B326C5E",
+        "Version": 2
+      },
+      {
+        "Name": "vendor.min.js",
+        "Path": "scripts",
+        "Hash": "3A4ABF323F2E6133856E7FDDFBB8B58558F794B7",
+        "Version": 3
+      },
+      {
+        "Name": "module1.js",
+        "Path": "scripts/submodule1",
+        "Hash": "E9E08CE70FB7F71F64D144843E26498AD5E2E992",
+        "Version": 1
+      },
+      {
+        "Name": "test.js",
+        "Path": "scripts/submodule1",
+        "Hash": "9001B46E3DA06935929BFF7E6FDF2DC840DE1501",
+        "Version": 1
+      }
+    ]
+  }
+}

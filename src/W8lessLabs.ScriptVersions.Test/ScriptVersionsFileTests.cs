@@ -120,7 +120,7 @@ namespace W8lessLabs.ScriptVersions.Test
             {
                 var versions = new ScriptVersionsFile();
 
-                Assert.True(await persist.IsNewer(lastUpdated));
+                Assert.False(await persist.IsNewerThan(lastUpdated));
 
                 Thread.Sleep(1);
 
@@ -134,9 +134,12 @@ namespace W8lessLabs.ScriptVersions.Test
 
                 persist.Save(versions);
 
-                Assert.False(await persist.IsNewer(lastUpdated));
+                Assert.True(await persist.IsNewerThan(lastUpdated));
 
-                Assert.True(await persist.IsNewer(DateTimeOffset.Now.AddSeconds(1)));
+                Assert.False(await persist.IsNewerThan(DateTimeOffset.Now.AddSeconds(1)));
+
+                DateTimeOffset defaultTime;
+                Assert.True(await persist.IsNewerThan(defaultTime));
             }
             finally
             {
