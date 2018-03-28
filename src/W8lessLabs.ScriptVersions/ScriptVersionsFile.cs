@@ -44,7 +44,7 @@ namespace W8lessLabs.ScriptVersions
                     {
                         var oldVersion = oldVersions[k];
 
-                        if (string.Equals(oldVersion.Name, latestVersion.Name, StringComparison.OrdinalIgnoreCase))
+                        if (oldVersion.FileNamesMatch(latestVersion))
                         {
                             foundOldVersion = true;
                             if (oldVersion.Hash != latestVersion.Hash)
@@ -54,7 +54,6 @@ namespace W8lessLabs.ScriptVersions
                             }
                             else
                                 updateVersions[j] = oldVersion;
-                            
                         }
                     }
                     if (!foundOldVersion)

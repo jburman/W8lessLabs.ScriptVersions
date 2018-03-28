@@ -1,4 +1,6 @@
-﻿namespace W8lessLabs.ScriptVersions
+﻿using System;
+
+namespace W8lessLabs.ScriptVersions
 {
     public class FileVersion
     {
@@ -20,6 +22,10 @@
         public string Path { get; set; }
         public string Hash { get; set; }
         public int Version { get; set; }
+
+        public bool FileNamesMatch(FileVersion compareTo) =>
+            Name?.Equals(compareTo?.Name, StringComparison.OrdinalIgnoreCase) == true && 
+            Path?.Equals(compareTo?.Path, StringComparison.OrdinalIgnoreCase) == true;
 
         public FileVersion IncrementVersion(string newHash) =>
             new FileVersion()

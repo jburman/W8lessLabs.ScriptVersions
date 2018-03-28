@@ -306,5 +306,60 @@ namespace W8lessLabs.ScriptVersions.Test
                 File.Delete(tempPath);
             }
         }
+
+        [Fact]
+        public void SetVersionsWithNewPath()
+        {
+            string tempPath = Path.Combine(Path.GetTempPath(), "scriptversionstest.json");
+            var persist = new ScriptVersionsFilePersist(tempPath);
+
+            try
+            {
+                var versions = new ScriptVersionsFile();
+                Assert.Equal(default(DateTimeOffset), versions.LastUpdated);
+
+                bool updated = versions.SetVersions("js", new[]
+                {
+                    new FileVersion("test1.js",
+                        "asdf123",
+                        "scripts",
+                        1)
+                });
+
+                Assert.True(updated);
+                Assert.NotEqual(default(DateTimeOffset), versions.LastUpdated);
+
+                Assert.True(versions.Files.Count == 1);
+                Assert.True(versions.Files.ContainsKey("js"));
+                Assert.True(1 == versions.Files["js"].Length);
+                Assert.Equal("test1.js", versions.Files["js"][0].Name);
+                Assert.Equal("asdf123", versions.Files["js"][0].Hash);
+                Assert.Equal("scripts", versions.Files["js"][0].Path);
+                Assert.Equal(1, versions.Files["js"][0].Version);
+
+
+                updated = versions.SetVersions("js", new[]
+                {
+                    new FileVersion("test1.js",
+                        "asdf123",
+                        "scripts/newpath",
+                        1)
+                });
+
+                Assert.True(updated);
+
+                Assert.True(versions.Files.Count == 1);
+                Assert.True(versions.Files.ContainsKey("js"));
+                Assert.True(1 == versions.Files["js"].Length);
+                Assert.Equal("test1.js", versions.Files["js"][0].Name);
+                Assert.Equal("asdf123", versions.Files["js"][0].Hash);
+                Assert.Equal("scripts/newpath", versions.Files["js"][0].Path);
+                Assert.Equal(1, versions.Files["js"][0].Version);
+            }
+            finally
+            {
+                File.Delete(tempPath);
+            }
+        }
     }
 }
