@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -48,17 +49,26 @@ namespace W8lessLabs.ScriptVersions
             _LoadScriptVersions();
         }
 
-        private bool _IsTimeToUpdate() => DateTimeOffset.Now > _expirationTime;
+        private bool _IsTimeToUpdate()
+        {
+            bool isTimeToUpdate = DateTimeOffset.Now > _expirationTime;
+
+            Debug.WriteLine("IsTimeToUpdate - {0}", isTimeToUpdate);
+
+            return isTimeToUpdate;
+        }
 
         private void _LoadScriptVersions()
         {
+            Debug.WriteLine("LoadScriptVersions - {0}", DateTime.Now);
+
             if (0 == Interlocked.Exchange(ref _scriptUpdateFlag, 1))
             {
                 if (_IsTimeToUpdate())
                 {
                     var loadVersions = Task.Run(async delegate
                     {
-                        if (_IsTimeToUpdate() && (await _scriptVersionsPersist.IsNewerThan(_lastLoaded)))
+                        if (await _scriptVersionsPersist.IsNewerThan(_lastLoaded))
                         {
                             _scriptVersions = await _scriptVersionsPersist.LoadAsync();
                             var scriptFiles = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
@@ -70,7 +80,11 @@ namespace W8lessLabs.ScriptVersions
                                     if (_scriptVersions.Files.TryGetValue(name, out FileVersion[] files))
                                     {
                                         foreach (var file in files)
-                                            collection[file.Path + "/" + file.Name] = file.Version.ToString();
+                                        {
+                                            string key = file.Path + "/" + file.Name;
+                                            collection[key] = file.Version.ToString();
+                                            Debug.WriteLine("Storing script file version - {0} => {1}", key, file.Version);
+                                        }
                                     }
                                 }
 
@@ -82,7 +96,6 @@ namespace W8lessLabs.ScriptVersions
 
                                 for (int i = 0; i < scriptFileTypes.Length; i++)
                                     SetFiles(scriptFiles, scriptFileTypes[i]);
-
 
                                 _scriptFiles = scriptFiles;     // assign new set of script versions
                                 _versionedScriptsCache.Clear(); // reset cached URLs
@@ -129,6 +142,9 @@ namespace W8lessLabs.ScriptVersions
 
             if (!string.IsNullOrEmpty(scriptPath))
             {
+                if (_IsTimeToUpdate())
+                    _LoadScriptVersions();
+
                 normalizedScriptPath = _NormalizeScriptPath(scriptPath, _options.UseMinified);
 
                 if (_scriptFiles != null)
@@ -140,9 +156,6 @@ namespace W8lessLabs.ScriptVersions
                     normalizedScriptPath = _NormalizeScriptPath(scriptPath, false);
                     _scriptFiles.TryGetValue(normalizedScriptPath, out version);
                 }
-
-                if (_IsTimeToUpdate())
-                    _LoadScriptVersions();
             }
             return (version, normalizedScriptPath);
         }

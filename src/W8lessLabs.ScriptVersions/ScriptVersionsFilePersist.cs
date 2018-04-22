@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -59,6 +60,8 @@ namespace W8lessLabs.ScriptVersions
         /// <returns></returns>
         public async Task<bool> IsNewerThan(DateTimeOffset compareTimeStamp)
         {
+            Debug.WriteLine("IsNewerThan - {0}", compareTimeStamp);
+
             bool returnNewer = false;
 
             if(File.Exists(_path))
@@ -74,12 +77,28 @@ namespace W8lessLabs.ScriptVersions
                         if(json.TokenType == JsonToken.PropertyName && json.Value.ToString() == lastUpdatedProperty)
                         {
                             DateTimeOffset? lastUpdated = await json.ReadAsDateTimeOffsetAsync().ConfigureAwait(false);
+
+                            Debug.WriteLine("Last update time from file - {0}", lastUpdated);
+
                             if (lastUpdated.HasValue && lastUpdated.Value >= compareTimeStamp)
+                            {
                                 returnNewer = true;
+
+                                Debug.WriteLine("File time is newer");
+                            }
+                            else
+                            {
+                                Debug.WriteLine("File time is older");
+                            }
+
                             break;
                         }
                     }
                 }
+            }
+            else
+            {
+                Debug.WriteLine("File did not exist - {0}", _path);
             }
 
             return returnNewer;

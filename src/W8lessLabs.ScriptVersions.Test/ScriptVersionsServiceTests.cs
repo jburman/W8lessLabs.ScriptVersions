@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace W8lessLabs.ScriptVersions.Test
@@ -191,6 +193,58 @@ namespace W8lessLabs.ScriptVersions.Test
             service = new ScriptVersionsService(_scriptVersionsFileWithCss); // should load all types by default
             Assert.Equal("1", service.GetVersion("scripts/main.js"));
             Assert.Equal("1", service.GetVersion("css/main.css"));
+        }
+
+        [Fact]
+        public async Task LoadNewVersionFromFile()
+        {
+            string tempPath = Path.Combine(Path.GetTempPath(), "scriptversionstest.json");
+            var persist = new ScriptVersionsFilePersist(tempPath);
+
+            try
+            {
+                var versions = new ScriptVersionsFile();
+                bool updated = versions.SetVersions("js", new[]
+                {
+                    new FileVersion("test1.js",
+                        "asdf123",
+                        "scripts",
+                        1)
+                });
+                persist.Save(versions);
+
+                var service = new ScriptVersionsService(tempPath, new ScriptVersionsServiceOptions()
+                {
+                    CacheExpires = TimeSpan.FromMilliseconds(200)
+                });
+
+                Assert.Equal("1", service.GetVersion("scripts/test1.js"));
+                await Task.Delay(210);
+                Assert.Equal("1", service.GetVersion("scripts/test1.js"));
+
+                service = new ScriptVersionsService(tempPath, new ScriptVersionsServiceOptions()
+                {
+                    CacheExpires = TimeSpan.FromMilliseconds(200)
+                });
+                Assert.Equal("1", service.GetVersion("scripts/test1.js"));
+
+                versions.SetVersions("js", new[]
+                {
+                    new FileVersion("test1.js",
+                        "asdf123",
+                        "scripts",
+                        2) // increment version
+                });
+                persist.Save(versions);
+
+                Assert.Equal("1", service.GetVersion("scripts/test1.js"));
+                await Task.Delay(210); // this should let the cache expire
+                Assert.Equal("2", service.GetVersion("scripts/test1.js"));
+            }
+            finally
+            {
+                File.Delete(tempPath);
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace W8lessLabs.ScriptVersions
 {
@@ -21,6 +22,8 @@ namespace W8lessLabs.ScriptVersions
         /// <returns>True if changes were made; otherwise, false.</returns>
         public bool SetVersions(string fileGroup, FileVersion[] latestVersions)
         {
+            Debug.WriteLine("SetVersions");
+
             bool scriptVersionsUpdated = false;
 
             FileVersion[] oldVersions = null;
@@ -47,17 +50,48 @@ namespace W8lessLabs.ScriptVersions
                         if (oldVersion.FileNamesMatch(latestVersion))
                         {
                             foundOldVersion = true;
+                            // default case is to compare hashes and then update the version
                             if (oldVersion.Hash != latestVersion.Hash)
                             {
+                                Debug.WriteLine("Old hash does not match new hash. Incrementing version - {0} - {1} - v{2} != {3} - v{4}", 
+                                    oldVersion.Name, 
+                                    oldVersion.Hash,
+                                    oldVersion.Version,
+                                    latestVersion.Hash,
+                                    latestVersion.Version);
+
+                                // if the version supplied is not greater than the existing version, then increment the existing one
+                                if (oldVersion.Version >= latestVersion.Version)
+                                    updateVersions[j] = oldVersion.IncrementVersion(latestVersion.Hash);
+                                else // otherwise, use the new version that was supplied
+                                    updateVersions[j] = latestVersion.CloneWithVersion(latestVersion.Version);
+
                                 updateVersions[j] = oldVersion.IncrementVersion(latestVersion.Hash);
                                 scriptVersionsUpdated = true;
                             }
+                            // allow version numbers to be updated if requested
+                            else if(oldVersion.Version != latestVersion.Version)
+                            {
+                                Debug.WriteLine("Version numbers do not match. Updating version - {0} - v{1} != v{2}",
+                                    oldVersion.Name,
+                                    oldVersion.Version,
+                                    latestVersion.Version);
+
+                                updateVersions[j] = latestVersion.CloneWithVersion(latestVersion.Version);
+                                scriptVersionsUpdated = true;
+                            }
                             else
+                            {
+                                Debug.WriteLine("Old hash matches new hash - {0} - {1}", oldVersion.Name, oldVersion.Hash);
+
                                 updateVersions[j] = oldVersion;
+                            }
                         }
                     }
                     if (!foundOldVersion)
                     {
+                        Debug.WriteLine("SetVersions - old version not found so adding new entry - {0} - {1}", latestVersions[j].Name, latestVersions[j].Version);
+
                         scriptVersionsUpdated = true;
                         updateVersions[j] = latestVersions[j].CloneWithVersion(1);
                     }
